@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloud Infra Portfolio — Ninad Sawant</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <span class="badge">Deployed via Terraform + GitHub Actions</span>
+    <header>
+      <h1>Static Site on AWS, Shipped by CI/CD</h1>
+      <p>This page is served from a private S3 bucket through CloudFront. Every part of the infrastructure below was provisioned by Terraform, and every deploy of this page happens automatically on push to <code>main</code>.</p>
+    </header>
+
+    <div class="card">
+      <h2>Infrastructure (Terraform)</h2>
+      <p>S3 (private, OAC-locked) → CloudFront (HTTPS, custom error pages) → optional Route 53 + ACM for a custom domain. A GitHub OIDC role is also provisioned so the pipeline never touches long-lived AWS keys.</p>
+      <div class="stack">
+        <span class="pill">Amazon S3</span>
+        <span class="pill">CloudFront</span>
+        <span class="pill">ACM</span>
+        <span class="pill">Route 53</span>
+        <span class="pill">IAM OIDC</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Pipeline (GitHub Actions)</h2>
+      <p>Two workflows: one plans/applies Terraform changes on pull requests and merges to <code>main</code>; the other syncs this <code>site/</code> folder to S3 and invalidates the CloudFront cache whenever site content changes.</p>
+      <div class="stack">
+        <span class="pill">terraform fmt / validate</span>
+        <span class="pill">terraform plan on PR</span>
+        <span class="pill">terraform apply on merge</span>
+        <span class="pill">aws s3 sync</span>
+        <span class="pill">CloudFront invalidation</span>
+      </div>
+    </div>
+
+    <footer>
+      Built by Ninad Sawant — <a href="https://github.com/Ninadds" target="_blank" rel="noopener">github.com/Ninadds</a>
+    </footer>
+  </div>
+</body>
+</html>

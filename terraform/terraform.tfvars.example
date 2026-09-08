@@ -1,0 +1,13 @@
+# Copy this file to terraform.tfvars and fill in your own values.
+# terraform.tfvars is git-ignored so you never commit account-specific values.
+
+project_name = "ninad-static-site"
+environment  = "prod"
+aws_region   = "eu-west-2"
+
+# Leave both blank to use the auto-generated *.cloudfront.net URL.
+domain_name    = ""
+hosted_zone_id = ""
+
+github_org  = "Ninadds"
+github_repo = "aws-static-site-terraform-cicd"
