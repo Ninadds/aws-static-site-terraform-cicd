@@ -41,13 +41,17 @@ data "aws_iam_policy_document" "github_actions_trust" {
       values   = ["sts.amazonaws.com"]
     }
 
-    # Restrict to this repo's main branch and any pull_request event, so a
-    # fork or unrelated repo can never assume this role.
+    # GitHub now embeds immutable numeric org/repo IDs into the sub claim
+    # (e.g. "repo:OWNER@12345/REPO@67890:..."), not just the plain names, as
+    # a security hardening measure. Wildcard around the "@<id>" segments so
+    # this matches regardless of whether GitHub sends the ID-suffixed form
+    # or the legacy plain-name form, for any ref/PR/environment in this repo.
     condition {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
       values = [
         "repo:${var.github_org}/${var.github_repo}:*",
+        "repo:${var.github_org}@*/${var.github_repo}@*:*",
       ]
     }
   }
